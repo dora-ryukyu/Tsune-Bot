@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ツネBot：詳細技術解説</title>
+    <style>
+        :root {
+            --primary-color: #0071e3;
+            --background-color: #ffffff;
+            --text-color: #1d1d1f;
+            --section-bg: #f5f5f7;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #2997ff;
+                --background-color: #000000;
+                --text-color: #f5f5f7;
+                --section-bg: #1d1d1f;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+            animation-delay: 0.3s;
+        }
+
+        h3 {
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+            animation-delay: 0.6s;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .feature {
+            background-color: var(--section-bg);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ツネBot：詳細技術解説</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>はじめに</h2>
+            <p>このページでは、Xで話題のツネBotについて、技術的な観点から詳しく解説いたします。ツネBotの特徴、使用している技術、運用方法、そして現状の課題まで、幅広く説明していきます。</p>
+        </section>
+
+        <section>
+            <h2>ツネBotとは</h2>
+            <p>ツネBotは、Xのガジェット界隈で話題になった常(ツネ)さんの「ツーネツネツネ！」構文を採用したBotです。この特徴的な構文を使用して、自動的に文章を生成し、Xに投稿しています。例えば、「ツーネツネツネ！今日は頑張ったから早めに寝るツネ！」というような投稿を行います。</p>
+        </section>
+
+        <section>
+            <h2>技術的な特徴</h2>
+            
+            <div class="feature">
+                <h3>1. 使用しているAPI</h3>
+                <p>ツネBotは、以下の二つのAPIの無料枠を活用しています：</p>
+                <ul>
+                    <li>Gemini 1.5 Pro API：
+                        <ul>
+                            <li>1日50件まで無料で使用できます。</li>
+                            <li>このAPIを使用して、リアルタイムで文章を生成しています。</li>
+                        </ul>
+                    </li>
+                    <li>X API：
+                        <ul>
+                            <li>1月に1500件まで無料で使用できます。</li>
+                            <li>生成された文章をXに投稿するために使用しています。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="feature">
+                <h3>2. 文章生成の工夫</h3>
+                <p>Gemini 1.5 Pro APIを使用する際、より多様な文章を出力するために、以下のパラメータを高く設定しています：</p>
+                <ul>
+                    <li>temperature</li>
+                    <li>top_p</li>
+                    <li>top_k</li>
+                </ul>
+                <p>これらの数値は、より最適な文章を作るために適宜調整しており、常にベストな設定を模索しています。</p>
+                <p>文章生成には、以下のプロンプトを使用しています：</p>
+                <p>あなたの名前はツネです。始めに「ツーネツネツネ！」と言った後、少しダークな世界観で、バカっぽく予測できない奇想天外な話をします。文章は1文程度の短い文を1つ作ります。ツネは自然豊かな長野県の松川村に住んでいるが、東京の秋葉原によく出かけます。信濃松川駅が最寄駅です。ツネ自身のことをイケメンだと思い込んでいます。iPhone 15 Pro、AQUOS R8、Pixel 8 Pro、Find X7 Ultraというスマホを使っています。はやちゃん、迎、もぐもぐ丸、タケ、はがねという名前の友達とよく遊びます。好きな食べ物はトロピカルジュース、焼き米、わかめうどんです。必ず文の初めに「ツーネツネツネ！」と言い、語尾は「ツネ！」といいます。例:[[ツーネツネツネ！今日は頑張ったから早めに寝るツネよ〜！/ツーネツネツネ！今から迎と転売競争するツネ！/ツーネツネツネ！もぐもぐ丸を長野の山に飛ばすツネ！/ツーネツネツネ！はがねのiPhone15Proを売るツネ！]]</p>
+            </div>
+
+            <div class="feature">
+                <h3>3. サーバーレスアーキテクチャ</h3>
+                <p>ツネBotは、Google Apps Scriptの無料枠を使用しており、サーバーを用意せずに自動投稿を実現しています。サーバーレスであることの主なメリットは以下の通りです：</p>
+                <ul>
+                    <li>自分でサーバーを用意する必要がありません。</li>
+                    <li>サーバー台数の節約になります。</li>
+                    <li>より安定した稼働が期待できます。</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>運用方法</h2>
+            <h3>投稿スケジュール</h3>
+            <p>1日50件の制約を守るために、以下の時間帯で15分おきにポストしています：</p>
+            <ul>
+                <li>7:00〜9:59</li>
+                <li>12:00〜12:59</li>
+                <li>15:00〜23:59</li>
+            </ul>
+            <h3>自動投稿の仕組み</h3>
+            <p>Google Apps Scriptの「トリガー」機能を使用して、15分ごとに時間判定プログラムを実行しています。この時間判定プログラムがポストする時間帯であると判定した場合、Gemini 1.5 Pro APIで文章を生成し、その文章をX APIを使用してポストします。</p>
+        </section>
+
+        <section>
+            <h2>開発背景</h2>
+            <p>ツネBotの製作者は、プログラミングの経験がありませんでした。そのため、インターネット上で公開されていた以下のプログラムを拝借し、組み合わせて使用しています：</p>
+            <ol>
+                <li>Geminiで文章を生成するためのプログラム：
+                    <a href="https://gas-4u.com/gas13/">https://gas-4u.com/gas13/</a>
+                </li>
+                <li>Xへ文章を投稿するプログラム：
+                    <a href="https://kazulog.fun/dev/twitter-bot-preparation/">https://kazulog.fun/dev/twitter-bot-preparation/</a>
+                </li>
+                <li>時間を判定してポストを実行するか否かを判定するプログラム：
+                    <a href="https://www.ai-shift.co.jp/techblog/2780">https://www.ai-shift.co.jp/techblog/2780</a>
+                </li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>現状と課題</h2>
+            <p>ツネBotの現状は、基本的に安定して動作しており、本人の公認Botにもなりました。また、ある程度閲覧されるようになり、認知度も向上しています。</p>
+            <p>しかし、以下のような課題も存在します：</p>
+            <ol>
+                <li>朝7時台はAPIの利用が混み合うために、エラーになってしまい投稿できないことがあります。</li>
+                <li>生成される文章に偏りがあり、時に1パターンになってしまうことがあります。</li>
+            </ol>
+            <p>これらの課題に対しては、今後改善を重ねていく予定です。</p>
+        </section>
+
+        <section>
+            <h2>おわりに</h2>
+            <p>ツネBotは、最新のAI技術と無料のAPI、そしてサーバーレスアーキテクチャを組み合わせたプロジェクトです。今後も改善を重ね、より安定した運用と多様な文章生成を目指して発展していく予定です。</p>
+        </section>
+    </main>
+</body>
+</html>
