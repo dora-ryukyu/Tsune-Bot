@@ -137,7 +137,8 @@ class TsuneGenerator {
         "ドラガジェ",
         "さっきー",
         "ガジェ中",
-        "四六五五"
+        "四六五五",
+        "ナカネ"
       ];
       this.devices = [
         "iPhone 16 Pro",
@@ -315,8 +316,8 @@ function judge_hour() {
   const time = new Date();
   
   //ポスト時間の数字範囲を判定する正規表現
-  //const regWorkHours =  /^(12|1[5-9]|2[0-3]|[7-9])$/; 
-  const regWorkHours =  /^(30)$/; 
+  const regWorkHours =  /^(12|1[5-9]|2[0-3]|[7-9])$/; 
+  //const regWorkHours =  /^(30)$/; 
 
   if (regWorkHours.test(time.getHours())) {
     Logger.log('ポスト時間内')
