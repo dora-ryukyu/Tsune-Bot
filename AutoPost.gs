@@ -127,8 +127,34 @@ const LOCATIONS = {
 
 class TsuneGenerator {
   constructor() {
-      this.friends = ["MUKAE", "はやちゃん", "hgzt", "popo", "もぐもぐ丸", "タケ", "ドラガジェ"];
-      this.devices = ["iPhone 16 Pro", "Xperia 1 VI", "Galaxy S24 Ultra", "Vivo X90 Pro+"];
+      this.friends = [
+        "迎",
+        "はやちゃん",
+        "hgzt",
+        "popo",
+        "泥散らす",
+        "take",
+        "ドラガジェ",
+        "さっきー",
+        "ガジェ中",
+        "四六五五"
+      ];
+      this.devices = [
+        "iPhone 16 Pro",
+        "Xperia 1 VI",
+        "Galaxy S24 Ultra",
+        "Vivo X200",
+        "Oppo Find X8",
+        "Xiaomi 14 Ultra",
+        "Xiaomi Mix Fold 4",
+        "Huawei P60 Pro",
+        "Vivo X90 Pro+",
+        "AQUOS R9 pro",
+        "AQUOS sense9",
+        "motorola edge 50s pro",
+        "arrows We2 Plus",
+        "Zenfone 11 Ultra"
+      ];
       this.favorites = ["トロピカルジュース", "焼き米", "わかめうどん"];
   }
 
@@ -233,9 +259,9 @@ const prompt = generator.generatePrompt();
               }
             ],
             'generationConfig':{
-              "temperature": 1.8,
-              "topP": 0.985,
-              "topK": 60
+              "temperature": 1.5,
+              "topP": 0.97,
+              "topK": 50
             },
            "safetySettings": [
              {         
