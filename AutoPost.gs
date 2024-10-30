@@ -85,19 +85,150 @@ function main() {
 }
 
 function gaslog_GeminiPro() {
-   // 現在の時刻を取得し、表示用にフォーマット
-  const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const formattedTime = `${hours}時${minutes}分`;
-  // プロンプトテキストに現在の時刻を挿入
-  const promptText = `あなたの名前はツネです。始めに「ツーネツネツネ！」と言った後、旅先で起こるバカっぽく予測できない奇想天外な文章を作ります。文章は短い1文にしなさい。以下の設定と例を忠実に守り文章を作りなさい。設定は全て平等に守りなさい。ツネの設定:[[自然豊かな松川村に住んでいる。車を所有しており、日本中どこにでも遊びに行く。現在の時刻は${formattedTime}。旅好きで、友達とよく遊びに出かける。使っているスマホはiPhone 16 Pro、Xperia 1 VI、Galaxy S24 Ultra、Vivo X90 Pro+。友達の名前はMUKAE、はやちゃん、hgzt、popo、もぐもぐ丸、タケ。好きな食べ物はトロピカルジュース、焼き米、わかめうどん。必ず文の初めに「ツーネツネツネ！」と言い、語尾は「ツネ！」である。]] 例:[[ツーネツネツネ！今日は頑張ったから早めに寝るツネよ〜！/ツーネツネツネ！今から迎と転売競争するツネ！/ツーネツネツネ！もぐもぐ丸を長野の山に飛ばすツネ！/ツーネツネツネ！はがねのiPhone15Proを売るツネ！]]`;
+// 基本的な設定とデータ
+const LOCATIONS = {
+  cities: [
+      // 北海道
+      { name: "札幌", features: ["時計台", "ラーメン", "雪まつり"] },
+      { name: "函館", features: ["夜景", "朝市", "いか"] },
+      // 東北
+      { name: "青森", features: ["ねぶた祭り", "りんご", "帆立"] },
+      { name: "仙台", features: ["牛タン", "七夕祭り", "松島"] },
+      // 関東
+      { name: "東京", features: ["スカイツリー", "渋谷", "秋葉原"] },
+      { name: "横浜", features: ["中華街", "みなとみらい", "赤レンガ倉庫"] },
+      // 中部
+      { name: "名古屋", features: ["味噌カツ", "城", "テレビ塔"] },
+      { name: "金沢", features: ["兼六園", "21世紀美術館", "近江町市場"] },
+      // 関西
+      { name: "京都", features: ["金閣寺", "清水寺", "嵐山"] },
+      { name: "大阪", features: ["通天閣", "道頓堀", "たこ焼き"] },
+      // 中国
+      { name: "広島", features: ["宮島", "お好み焼き", "原爆ドーム"] },
+      { name: "松江", features: ["出雲大社", "宍道湖", "抹茶"] },
+      // 四国
+      { name: "高知", features: ["カツオ", "よさこい祭り", "四万十川"] },
+      { name: "松山", features: ["道後温泉", "みかん", "城"] },
+      // 九州
+      { name: "福岡", features: ["太宰府", "ラーメン", "博多どんたく"] },
+      { name: "長崎", features: ["端島", "グラバー園", "稲佐山"] },
+      // 沖縄
+      { name: "那覇", features: ["首里城", "国際通り", "漫湖"] },
+      { name: "石垣島", features: ["マンタ", "星空", "八重山そば"] }
+  ],
+  localAreas: [
+      "松川村",
+      "安曇野",
+      "白馬村",
+      "大町市",
+      "松本市"
+  ]
+};
+
+class TsuneGenerator {
+  constructor() {
+      this.friends = ["MUKAE", "はやちゃん", "hgzt", "popo", "もぐもぐ丸", "タケ", "ドラガジェ"];
+      this.devices = ["iPhone 16 Pro", "Xperia 1 VI", "Galaxy S24 Ultra", "Vivo X90 Pro+"];
+      this.favorites = ["トロピカルジュース", "焼き米", "わかめうどん"];
+  }
+
+  // 現在の日時情報を取得
+  getCurrentTimeInfo() {
+      const now = new Date();
+      const hours = now.getHours();
+      const timeOfDay = 
+          hours >= 5 && hours < 12 ? "朝" :
+          hours >= 12 && hours < 17 ? "昼" :
+          hours >= 17 && hours < 20 ? "夕方" : "夜";
+
+      return {
+          time: now.toLocaleTimeString('ja-JP'),
+          dayOfWeek: new Intl.DateTimeFormat('ja-JP', { weekday: 'long' }).format(now),
+          month: now.getMonth() + 1,
+          timeOfDay: timeOfDay
+      };
+  }
+
+  // 季節を取得
+  getSeason(month) {
+      if (month >= 3 && month <= 5) return '春';
+      if (month >= 6 && month <= 8) return '夏';
+      if (month >= 9 && month <= 11) return '秋';
+      return '冬';
+  }
+
+  // ランダムな要素を取得
+  getRandomElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+  }
+
+  // 旅行先を生成
+  generateDestination() {
+      const useLocalArea = Math.random() < 0.2; // 20%の確率で地元エリア
+      if (useLocalArea) {
+          return {
+              name: this.getRandomElement(LOCATIONS.localAreas),
+              features: ["自然", "のんびり", "田舎"]
+          };
+      }
+      return this.getRandomElement(LOCATIONS.cities);
+  }
+
+  // プロンプトを生成
+  generatePrompt() {
+      const timeInfo = this.getCurrentTimeInfo();
+      const season = this.getSeason(timeInfo.month);
+      const destination = this.generateDestination();
+      const friend = this.getRandomElement(this.friends);
+      const device = this.getRandomElement(this.devices);
+      const food = this.getRandomElement(this.favorites);
+      const feature = this.getRandomElement(destination.features);
+
+      return `
+# システム情報
+現在の状況：
+- 時刻: ${timeInfo.time}
+- 曜日: ${timeInfo.dayOfWeek}
+- 時間帯: ${timeInfo.timeOfDay}
+- 季節: ${season}
+- 選択された旅行先: ${destination.name}
+- 旅行先の特徴: ${feature}
+
+# キャラクター設定：ツネ
+- 基本設定：自然豊かな松川村在住の旅好き
+- 口調：「ツーネツネツネ！」で始まり「ツネ！」で終わる
+- 性格：陽気で予測不能な行動をする
+
+# コンテキスト情報
+- 共に遊ぶ友達: ${friend}
+- 使用するデバイス: ${device}
+- 今食べたい好物: ${food}
+
+# 応答ルール
+1. 必ず短い1文で回答
+2. 現在時刻(${timeInfo.time})を考慮した内容
+3. バカっぽく予測できない奇想天外な展開
+4. ${destination.name}の特徴(${feature})を含める
+5. 与えられた要素を2〜3個使用
+
+# 応答例
+- ツーネツネツネ！${timeInfo.timeOfDay}の${destination.name}で${friend}と${feature}を${device}で撮影しながら逆立ち散歩するツネ！
+- ツーネツネツネ！${season}の${destination.name}で${food}を食べながら${feature}でスカイダイビングするツネ！
+- ツーネツネツネ！${destination.name}の${feature}で${friend}と一緒に${device}を投げて輪投げ大会を開催するツネ！
+
+応答を生成してください。`;
+  }
+}
+
+// 使用
+const generator = new TsuneGenerator();
+const prompt = generator.generatePrompt();
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${GEMINI_API}`
         , payload = {
             'contents': [
               {
                 'parts': [{
-                  'text': promptText
+                  'text': prompt
                 }]
               }
             ],
