@@ -121,7 +121,8 @@ const LOCATIONS = {
       "安曇野",
       "白馬村",
       "大町市",
-      "松本市"
+      "松本市",
+      "佐久市"
   ]
 };
 
@@ -218,7 +219,7 @@ class TsuneGenerator {
 - 曜日: ${timeInfo.dayOfWeek}
 - 時間帯: ${timeInfo.timeOfDay}
 - 季節: ${season}
-- 選択された旅行先: ${destination.name}
+- 旅行先: ${destination.name}
 - 旅行先の特徴: ${feature}
 
 # キャラクター設定：ツネ
@@ -233,10 +234,10 @@ class TsuneGenerator {
 
 # 応答ルール
 1. 必ず短い1文で回答
-2. 現在時刻(${timeInfo.time})を考慮した内容
+2. 現在時刻(${timeInfo.time})を考慮した内容、ただし時刻そのものは出力しない
 3. バカっぽく予測できない奇想天外な展開
 4. ${destination.name}の特徴(${feature})を含める
-5. 与えられた要素を2〜3個使用
+5. 与えられた要素を2つ以上使用
 
 # 応答例
 - ツーネツネツネ！${timeInfo.timeOfDay}の${destination.name}で${friend}と${feature}を${device}で撮影しながら逆立ち散歩するツネ！
