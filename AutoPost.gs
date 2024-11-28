@@ -139,7 +139,8 @@ class TsuneGenerator {
         "さっきー",
         "ガジェ中",
         "四六五五",
-        "ナカネ"
+        "ナカネ",
+        "KDS"
       ];
       this.devices = [
         "iPhone 16 Pro",
@@ -237,7 +238,8 @@ class TsuneGenerator {
 2. 現在時刻(${timeInfo.time})を考慮した内容、ただし時刻そのものは出力しない
 3. バカっぽく予測できない奇想天外な展開
 4. ${destination.name}の特徴(${feature})を含める
-5. 与えられた要素を2つ以上使用
+5. 与えられた要素をいくつか使用
+6. 文法上正しい日本語の使用
 
 # 応答例
 - ツーネツネツネ！${timeInfo.timeOfDay}の${destination.name}で${friend}と${feature}を${device}で撮影しながら逆立ち散歩するツネ！
@@ -251,7 +253,7 @@ class TsuneGenerator {
 // 使用
 const generator = new TsuneGenerator();
 const prompt = generator.generatePrompt();
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${GEMINI_API}`
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-exp-1121:generateContent?key=${GEMINI_API}`
         , payload = {
             'contents': [
               {
@@ -261,9 +263,9 @@ const prompt = generator.generatePrompt();
               }
             ],
             'generationConfig':{
-              "temperature": 1.5,
-              "topP": 0.97,
-              "topK": 50
+              "temperature": 1.0,
+              "topP": 0.95,
+              "topK": 40
             },
            "safetySettings": [
              {         
@@ -317,7 +319,7 @@ function judge_hour() {
   const time = new Date();
   
   //ポスト時間の数字範囲を判定する正規表現
-  const regWorkHours =  /^(12|1[5-9]|2[0-3]|[7-9])$/; 
+  const regWorkHours =  /^(12|1[8-9]|2[0-3]|[7-8])$/; 
   //const regWorkHours =  /^(30)$/; 
 
   if (regWorkHours.test(time.getHours())) {
